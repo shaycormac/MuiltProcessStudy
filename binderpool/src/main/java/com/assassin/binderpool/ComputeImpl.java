@@ -7,8 +7,8 @@ import android.os.RemoteException;
  * @email: fang47881@126.com
  * @ltd: 金螳螂企业（集团）有限公司
  * @date: 2017/11/17 16:13
- * @version:
- * @description:
+ * @version: 1.0
+ * @description: 计算的具体实现
  */
 
 public class ComputeImpl extends ICompute.Stub 

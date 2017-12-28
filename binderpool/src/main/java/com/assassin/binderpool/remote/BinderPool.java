@@ -8,7 +8,9 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.assassin.binderpool.ComputeImpl;
 import com.assassin.binderpool.IBinderPool;
+import com.assassin.binderpool.SecurityCenterImpl;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -25,15 +27,30 @@ public class BinderPool
 {
     private static final String TAG = "BinderPool";
     private Context mContext;
+    //将binder接口整合到这里来。
     private IBinderPool mBinderPool;
     //单例
     private static  volatile  BinderPool sInstance;
-    //???
+    //这个家伙主要工作是把异步请求转换成同步请求
     private CountDownLatch mConnectBinderPoolCountDownLatch;
+    //两个静态常量表明两个binder远程接口，当然还可以更多
+    /**
+     * 静态变量的含义
+     */
+    public static final int BINDER_NONE = -1;
+    /**
+     * 计算的请求
+     */
+    public static final int BINDER_COMPUTE = 0;
+    /**
+     * 加密，解密
+     */
+    public static final int BINDER_SECURITY_CENTER = 1;
 
-    private BinderPool(Context mContext) 
+    private BinderPool(Context context) 
     {
-        this.mContext = mContext.getApplicationContext();
+        //单例，使用app的引用。
+        mContext = context.getApplicationContext();
         connectBinderPoolService();
         
     }
@@ -94,6 +111,7 @@ public class BinderPool
             mBinderPool = IBinderPool.Stub.asInterface(service);
 
             try {
+                //设置死亡的时候，尝试重新连接
                 mBinderPool.asBinder().linkToDeath(mBinderPoolDeathRecipient, 0);
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -122,4 +140,30 @@ public class BinderPool
             connectBinderPoolService();
         }
     };
+    
+    //静态方法，实现binder池的接口
+    public static class BinderPoolImpl extends IBinderPool.Stub
+    {
+
+        public BinderPoolImpl() {
+            super();
+        }
+
+        @Override
+        public IBinder queryBinder(int binderCode) throws RemoteException 
+        {
+            IBinder binder = null;
+            switch(binderCode){
+                case BINDER_SECURITY_CENTER:
+                    //根据不同的code，返回不同的binder
+                    binder = new SecurityCenterImpl();
+                    break;
+                case BINDER_COMPUTE:
+                    binder = new ComputeImpl();
+                    break;
+                default:break;
+            }
+            return binder;
+        }
+    }
 }
