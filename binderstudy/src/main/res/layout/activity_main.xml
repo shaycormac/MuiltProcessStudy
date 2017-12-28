@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.goldmantis.binderstudy.MainActivity">
+<EditText
+    android:id="@+id/etA"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:hint="请输入a的值"/>
+<EditText
+    android:id="@+id/etB"
+    android:layout_marginTop="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:hint="请输入b的值"/>
+    
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="得到远程计算的值"
+        android:id="@+id/tvResult"/>
+    
+    
+    <Button
+        android:id="@+id/btnCalculate"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:text="计算"/>
+
+
+    <Button
+        android:id="@+id/btnSecond"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:text="稍微复杂的进程通信"/>
+    
+    
+    
+
+</LinearLayout>
